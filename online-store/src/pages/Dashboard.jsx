@@ -4,11 +4,6 @@ import { ProductService } from "../services/productService";
 import { CustomerService } from "../services/customerService";
 import { EmployeeService } from "../services/employeeService";
 
-import { useState, useEffect } from "react";
-import { OrderService } from "../services/orderService";
-import { ProductService } from "../services/productService";
-import { CustomerService } from "../services/customerService";
-import { EmployeeService } from "../services/employeeService";
 
 export default function OrdersMain() {
   const [products, setProducts] = useState([]);
