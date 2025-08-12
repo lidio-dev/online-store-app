@@ -4,7 +4,6 @@ import { ProductService } from "../services/productService";
 import { CustomerService } from "../services/customerService";
 import { EmployeeService } from "../services/employeeService";
 
-
 export default function OrdersMain() {
   const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -72,7 +71,7 @@ export default function OrdersMain() {
       details: items.map((item) => ({
         product_id: item.product_id,
         quantity: item.quantity,
-        unit_price: item.price
+        unit_price: item.price,
       })),
     };
 
@@ -100,7 +99,10 @@ export default function OrdersMain() {
   return (
     <div className="p-6 space-y-6">
       {/* Formulario */}
-      <form onSubmit={saveOrder} className="border p-4 rounded shadow space-y-4">
+      <form
+        onSubmit={saveOrder}
+        className="border p-4 rounded shadow space-y-4"
+      >
         <h2 className="text-xl font-bold">Registrar Orden</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -222,20 +224,40 @@ export default function OrdersMain() {
         {(orders || []).length === 0 ? (
           <p className="text-gray-500">No hay órdenes registradas.</p>
         ) : (
-          (orders || []).map((order) => (
-            <div key={order.order_id} className="border p-2 mb-2 rounded">
-              <p><strong>Cliente:</strong> {order.customer?.name}</p>
-              <p><strong>Empleado:</strong> {order.employee?.name}</p>
-              <p><strong>Fecha:</strong> {order.order_date}</p>
-              <ul className="list-disc list-inside">
-                {(order.orderDetails || []).map((item, i) => (
-                  <li key={i}>
-                    {item.product?.name} - {item.quantity} x ${item.unit_price}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
+          (orders || []).map((order) => {
+            const totalOrden = (order.order_details || []).reduce(
+              (acc, item) => acc + item.quantity * item.unit_price,
+              0
+            );
+
+            return (
+              <div key={order.order_id} className="border p-2 mb-2 rounded">
+                <p>
+                  <strong>Cliente:</strong> {order.customer?.name}
+                </p>
+                <p>
+                  <strong>Empleado:</strong> {order.employee?.name}
+                </p>
+                <p>
+                  <strong>Fecha:</strong> {order.order_date}
+                </p>
+
+                <ul className="list-disc list-inside">
+                  {(order.order_details || []).map((item, i) => (
+                    <li key={i}>
+                      {item.product?.name} - {item.quantity} x $
+                      {item.unit_price}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Total de la orden */}
+                <p className="text-right font-bold mt-2">
+                  Total: ${totalOrden.toFixed(2)}
+                </p>
+              </div>
+            );
+          })
         )}
       </div>
     </div>

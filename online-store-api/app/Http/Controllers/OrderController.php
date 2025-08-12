@@ -17,7 +17,7 @@ class OrderController extends Controller
     {
         // Incluye relaciones con cliente y empleado
         return response()->json(
-            Order::with(['customer', 'employee'])->get(),
+            Order::with(['customer', 'employee', 'orderDetails.product'])->get(),
             200
         );
     }
